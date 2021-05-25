@@ -1,0 +1,11 @@
+<h1>Masters</h1>
+{% for master in masters %}
+<hr>
+<img src="{{ master.photo.url }}" height="100" width="1500" >
+<hr>
+{{ master.full_name }}
+<hr>
+{{ master.exp }}
+<hr>
+{{ master.birth_date }}
+{% endfor %}
