@@ -7,5 +7,5 @@ urlpatterns = [
     path('masters/',masters),
     path('register/',register_page),
     path('login/',login_page,name='login'),
-    path('master_detail/<int:master_id>/',master_detail,name='master_detail')
+    path('master_detail/<int:master_id>/',master_detail,name='master_detail'),
 ]
