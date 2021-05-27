@@ -2,8 +2,12 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from .forms import RegisterForm
 from .models import Service
 from  .models import Master
+from .services import profileCreate
+
 
 def homepage(request):
     return HttpResponse(f'Welcome to our site, {request.user}')
@@ -17,11 +21,12 @@ def masters(request):
     return render(request,'master.html',{'masters':masters})
 
 def register_page(request):
-    form = UserCreationForm()
+    form = RegisterForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            profileCreate(form.cleaned_data,form.instance)
     return render(request,'register.html',{'form':form})
 
 
