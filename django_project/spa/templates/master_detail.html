@@ -1,2 +1,15 @@
-{{master.full_name}}
-{{master.exp}}
+Имя мастера:{{master.full_name}}
+<p>Лет  стажа:{{master.exp}}</p>
+<hr>
+{% for service in services %}
+<p>Название услуги:<b>{{service.name}}</b></p>
+<p>Цена:{{service.price}}</p>
+{% endfor %}
+{% for certificate in certificates %}
+Имя сертификата:<b>{{ certificate.name }}</b>
+<p>Дата выдачи:{{ certificate.date_graduate }}</p>
+<p>Срок годности сертификата:{{certificate.date_expired}}</p>
+<p>Школа, которая выдала сертификат:{{certificate.school}}</p>
+<img src="{{certificate.photo.url}}" height="200" width="128">
+{% endfor %}
+
