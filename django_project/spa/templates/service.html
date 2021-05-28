@@ -6,4 +6,6 @@
 {{ service.price }}
 <hr>
 <a href="{% url 'master_detail' service.master.id %}">{{service.master}}</a>
+<a href="{% url 'order' service.id %}">Заказать!</a>
+<br>
 {% endfor %}
