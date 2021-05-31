@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from .models import Service
 from  .models import Master
-from .services import profileCreate
+from .services import profileCreate,checkExpired
 
 
 def homepage(request):
@@ -45,7 +45,11 @@ def master_detail(request,master_id):
     try:
         master = Master.objects.get(id=master_id)
         services = master.services.all()
-        certificates = master.certificate_set.all()
+        certificates = master.certificate_set.filter(status='active')
+        checkExpired(certificates)
+
     except Master.DoesNotExist:
         return HttpResponse(404)
     return render(request,'master_detail.html',{'master':master,'services':services,'certificates':certificates})
+
+
