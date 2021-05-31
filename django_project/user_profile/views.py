@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Profile
+from .models import Profile,Order
 from .forms import OrderForm
 from .services import incrementOrderCount, countMoney
 from spa.models import Service
+
 
 
 def profile_page(request):
@@ -28,3 +29,18 @@ def order_page(request, service_id):
             countMoney(user.profile, form.instance)
             form.save()
     return render(request, 'order.html', {'form': form})
+
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request,'my_order.html',{'orders':orders})
+
+
+def delete_order(request,order_id):
+    try:
+        order = Order.objects.get(user=request.user,id=order_id)
+    except Order.DoesNotExist:
+        return HttpResponse('?')
+    if request.method == 'POST':
+        order.delete()
+    return render(request,'delete_order.html')
