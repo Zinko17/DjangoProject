@@ -11,7 +11,6 @@ def profileCreate(profile_data,instance):
 
 def checkExpired(certificates):
     for certificate in certificates:
-        print(certificates)
         date_expired = certificate.date_expired
         today = datetime.date.today()
         if today > date_expired:
