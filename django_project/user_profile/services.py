@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-
+from django.utils import timezone
 
 def incrementOrderCount(profile):
     profile.order_count += 1
@@ -15,3 +15,12 @@ def countMoney(profile, instance):
             instance.status = 'closed'
         else:
             raise ValidationError('no money')
+
+
+def time_check(order_date):
+    date_now = timezone.now()
+    delta = timezone.timedelta(minutes=5)
+    if (date_now - order_date) <= delta:
+        return True
+    else:
+        return False
