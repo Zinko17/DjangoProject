@@ -1,3 +1,31 @@
-<img src="{{profile.photo.url}}">
-{{profile.name}}
-{{profile.age}}
+{% extends 'base.html' %}
+{% block content %}
+<section id="teams" class="section teams">
+  <div class="container">
+      <div class="section-header">
+                <h2 class="wow fadeInDown animated">Profile</h2>
+                <p class="wow fadeInDown animated">Hello,{{profile.user}} <br>Its your profile </p>
+            </div>
+    <div class="row">
+
+      <div class="col-md-3 col-sm-6">
+        <div class="person"><img src="{{profile.photo.url}}" alt="" class="img-responsive">
+          <div class="person-content">
+            <h4>{{profile.name}}</h4>
+            <h4>{{profile.user}}</h4>
+            <h5 class="role">{{prof.wallet}}</h5>
+            <h5 class="order_count">{{profile.order_count}}</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit eget risus vitae massa.</p>
+          </div>
+          <ul class="social-icons clearfix">
+            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+            <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
