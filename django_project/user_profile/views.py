@@ -1,12 +1,12 @@
+from django.contrib.auth.models import AnonymousUser
 from django.utils import timezone
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Profile,Order
+from .models import Profile, Order
 from .forms import OrderForm
-from .services import incrementOrderCount, countMoney,time_check
+from .services import incrementOrderCount, countMoney, time_check
 from spa.models import Service
-
 
 
 def profile_page(request):
@@ -30,17 +30,20 @@ def order_page(request, service_id):
             incrementOrderCount(user.profile)
             countMoney(user.profile, form.instance)
             form.save()
-    return render(request, 'order.html', {'form': form})
+    return render(request, 'order.html', {'form': form,'service':service})
 
 
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user)
-    return render(request,'my_order.html',{'orders':orders})
+    user = request.user
+    if isinstance(user, AnonymousUser):
+        return HttpResponse('Please login!')
+    orders = Order.objects.filter(user=user)
+    return render(request, 'my_order.html', {'orders': orders})
 
 
-def delete_order(request,order_id):
+def delete_order(request, order_id):
     try:
-        order = Order.objects.get(user=request.user,id=order_id)
+        order = Order.objects.get(user=request.user, id=order_id)
     except Order.DoesNotExist:
         return HttpResponse('?')
     if request.method == 'POST':
@@ -49,20 +52,20 @@ def delete_order(request,order_id):
             order.delete()
         else:
             return HttpResponse('Time is Up!')
-    return render(request,'delete_order.html')
+    return render(request, 'delete_order.html')
 
 
-def update_order(request,order_id):
+def update_order(request, order_id):
     try:
         order = Order.objects.get(user=request.user, id=order_id)
     except Order.DoesNotExist:
         return HttpResponse('?')
     form = OrderForm(instance=order)
     if request.method == 'POST':
-        form = OrderForm(request.POST,instance=order)
+        form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             if time_check(order.date_created):
                 form.save()
             else:
                 return HttpResponse('Time is UP!')
-    return render(request,'order.html',{'form':form})
+    return render(request, 'order.html', {'form': form})
