@@ -5,20 +5,23 @@ from django.shortcuts import render, redirect
 
 from .forms import RegisterForm
 from .models import Service
-from  .models import Master
-from .services import profileCreate,checkExpired
+from .models import Master
+from .services import profileCreate, checkExpired
 
 
 def homepage(request):
-    return HttpResponse(f'Welcome to our site, {request.user}')
+    return render(request, 'index.html')
+
 
 def services(request):
     services = Service.objects.all()
-    return render(request,'service.html',{'services':services})
+    return render(request, 'service.html', {'services': services})
+
 
 def masters(request):
     masters = Master.objects.all()
-    return render(request,'master.html',{'masters':masters})
+    return render(request, 'master.html', {'masters': masters})
+
 
 def register_page(request):
     form = RegisterForm()
@@ -26,22 +29,21 @@ def register_page(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            profileCreate(form.cleaned_data,form.instance)
-    return render(request,'register.html',{'form':form})
-
+            profileCreate(form.cleaned_data, form.instance)
+    return render(request, 'register.html', {'form': form})
 
 
 def login_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request,username=username,password=password)
-        login(request,user)
+        user = authenticate(request, username=username, password=password)
+        login(request, user)
         return redirect('home')
-    return render(request,'login.html')
+    return render(request, 'login.html')
 
 
-def master_detail(request,master_id):
+def master_detail(request, master_id):
     try:
         master = Master.objects.get(id=master_id)
         services = master.services.all()
@@ -50,6 +52,4 @@ def master_detail(request,master_id):
 
     except Master.DoesNotExist:
         return HttpResponse(404)
-    return render(request,'master_detail.html',{'master':master,'services':services,'certificates':certificates})
-
-
+    return render(request, 'master_detail.html', {'master': master, 'services': services, 'certificates': certificates})
