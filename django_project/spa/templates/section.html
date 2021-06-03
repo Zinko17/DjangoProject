@@ -8,7 +8,7 @@
           <li><a href="{% url 'masters' %}">Masters</a></li>
           {% if request.user.is_authenticated %}
           <li><a href="{% url 'my_orders' %}">My orders</a></li>
-          <li><a href="#package">Profile</a></li>
+          <li><a href="{% url 'profile' %}">Profile</a></li>
           {% else %}
           <li><a href="#gallery">Register</a></li>
           <li><a href="#contact">Login</a></li>
