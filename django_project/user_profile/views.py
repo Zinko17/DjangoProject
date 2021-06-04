@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Profile, Order
-from .forms import OrderForm
+from .forms import OrderForm,ProfileForm
 from .services import incrementOrderCount, countMoney, time_check
 from spa.models import Service
 
@@ -14,7 +14,12 @@ def profile_page(request):
         profile = Profile.objects.get(user=request.user)
     except (Profile.DoesNotExist, TypeError):
         return HttpResponse('404')
-    return render(request, 'profile.html', {'profile': profile})
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST,request.FILES,instance=profile)
+        if form.is_valid():
+            form.save()
+    return render(request, 'profile.html', {'profile': profile,'form':form})
 
 
 def order_page(request, service_id):
@@ -69,3 +74,15 @@ def update_order(request, order_id):
             else:
                 return HttpResponse('Time is UP!')
     return render(request, 'order.html', {'form': form})
+
+def update_profile(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except (Profile.DoesNotExist, TypeError):
+        return HttpResponse('404')
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST,request.FILES,instance=profile)
+        if form.is_valid():
+            form.save()
+    return render(request, 'update_profile.html', {'profile': profile,'form':form})
