@@ -10,6 +10,8 @@ def countMoney(profile, instance):
     price = instance.service.price
     if instance.payment_method == 'wallet':
         if profile.wallet >= price:
+            if profile.sale_amount > 0:
+                price = price - (price*profile.sale_amount)
             profile.wallet -= price
             profile.save()
             instance.status = 'closed'
@@ -24,3 +26,9 @@ def time_check(order_date):
         return True
     else:
         return False
+
+
+def count_sale(profile):
+    if profile.order_count > 50:
+        profile.sale_amount = 0.05
+        profile.save()
