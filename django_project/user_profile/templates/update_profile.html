@@ -1,0 +1,6 @@
+<img src="{{profile.photo.url}}" height="64" width="64" >
+<form method = "POST" action = "" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form}}
+  <input type = "submit">
+</form>
